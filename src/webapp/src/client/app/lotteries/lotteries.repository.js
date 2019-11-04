@@ -119,6 +119,7 @@
             return $http.get(url + 'Export?lotteryId=' + lotteryId, {
                 responseType: 'arraybuffer'
             });
+        }
 
         function getLotteryParticipants(filters) {
             return $resource(url + `Participants/Paged`, '', {
