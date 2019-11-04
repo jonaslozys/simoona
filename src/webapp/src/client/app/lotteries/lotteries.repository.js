@@ -28,12 +28,13 @@
             refundParticipants: refundParticipants,
             getLotteryWidgetInfo: getLotteryWidgetInfo,
             buyTickets: buyTickets,
+            exportParticipants: exportParticipants,
             getLotteryStatistics: getLotteryStatistics,
-            exportParticipants: exportParticipants
+            getLotteryParticipants: getLotteryParticipants
         };
         return service;
 
-        /////
+        /////0
 
         function getAllLotteries() {
             return $resource(url + 'All').query().$promise;
@@ -118,6 +119,14 @@
             return $http.get(url + 'Export?lotteryId=' + lotteryId, {
                 responseType: 'arraybuffer'
             });
+
+        function getLotteryParticipants(filters) {
+            return $resource(url + `Participants/Paged`, '', {
+                'query': {
+                    method: 'GET',
+                    isArray: false
+                }
+            }).query(filters).$promise;
         }
     }
 })();
