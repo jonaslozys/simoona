@@ -44,6 +44,7 @@
 
     window.modules = modulesList;
     window.isPremium = true; // Enable/disable premium modules
+    window.lotteriesEnabled = true;
     window.usingAnimatedGifs = false; // Used to determine if back-end uses AnimatedGifs plugin
     window.usePostWatching = true; // Used to show/hide post watching feature
 

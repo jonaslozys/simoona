@@ -8,12 +8,12 @@
         })
         .controller('lotteryManageController', lotteryManageController);
 
-    lotteryManageController.$inject = ['$scope', '$state', 'lotteryRepository', '$rootScope',
+    lotteryManageController.$inject = ['$state', 'lotteryRepository', '$rootScope',
     'notifySrv', '$q', 'localeSrv', 'errorHandler', 'lotteryStatuses', 'lottery', 'pictureRepository', 'dataHandler', 'lotteryImageSettings', '$timeout'
     ];
 
     function lotteryManageController(
-        $scope, $state, lotteryRepository, $rootScope, notifySrv, $q, localeSrv, errorHandler,
+        $state, lotteryRepository, $rootScope, notifySrv, $q, localeSrv, errorHandler,
         lotteryStatuses, lottery, pictureRepository, dataHandler, lotteryImageSettings, $timeout) {
         
         var vm = this;
@@ -48,6 +48,7 @@
                 vm.lottery.endDate = moment.utc(vm.lottery.endDate).local().startOf('minute').toDate();
                 vm.isStarted = vm.lottery.status === lotteryStatuses.started;
                 vm.isDrafted = vm.lottery.status === lotteryStatuses.drafted;
+                vm.isEnded = (vm.lottery.status === lotteryStatuses.aborted) || (vm.lottery.status === lotteryStatuses.ended);
                 $rootScope.pageTitle = 'lotteries.editLottery';
             } else if (states.isCreate) {
                 $rootScope.pageTitle = 'lotteries.createLottery';
@@ -89,14 +90,12 @@
         }
 
         function saveimages() {
-            var uploads = [];
-            vm.lotteryImages.forEach((image, index) => {
+            var uploads = vm.lotteryImages.map((image, index) => {
                 var lotteryImageBlob = dataHandler.dataURItoBlob(vm.lotteryCroppedImages[index], image.type);
                 lotteryImageBlob.lastModifiedDate = new Date();
                 lotteryImageBlob.name = image.name;
-                uploads.push(pictureRepository.upload([lotteryImageBlob]));
+                return pictureRepository.upload([lotteryImageBlob]);
             })
-
 
             return $q.all(uploads)
                 .then(function(data) {
@@ -104,7 +103,7 @@
                     data.forEach(result => {
                         images.push(result.data);
                     })
-                    return images;
+                    return data.map(result => result.data);
             });
         }
 
@@ -123,6 +122,7 @@
                         .then(newImages => {
                             vm.lottery.images = vm.lottery.images.concat(newImages);
                             lotteryRepository.updateDrafted(vm.lottery)
+                            .then(updateSucess('lotteries.hasBeenSaved'))
                         })
                 } else {
                     lotteryRepository.updateDrafted(vm.lottery)

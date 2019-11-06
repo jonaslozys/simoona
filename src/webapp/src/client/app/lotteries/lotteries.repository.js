@@ -7,11 +7,10 @@
 
     lotteryRepository.$inject = [
         '$resource',
-        '$http',
         'endPoint'
     ];
 
-    function lotteryRepository($resource, $http, endPoint) {
+    function lotteryRepository($resource, endPoint) {
         var url = endPoint + '/Lottery/';
         var lotteryWidgetUrl = endPoint + '/LotteryWidget/';
 
@@ -26,15 +25,14 @@
             finishLottery: finishLottery,
             getLotteryStatus: getLotteryStatus,
             refundParticipants: refundParticipants,
-            getLotteryWidgetInfo: getLotteryWidgetInfo,
             buyTickets: buyTickets,
             exportParticipants: exportParticipants,
+            getLotteryWidgetInfo: getLotteryWidgetInfo,
             getLotteryStatistics: getLotteryStatistics,
             getLotteryParticipants: getLotteryParticipants
         };
         return service;
 
-        /////0
 
         function getAllLotteries() {
             return $resource(url + 'All').query().$promise;
@@ -104,9 +102,10 @@
 
         function getLotteryWidgetInfo(){
             return $resource(lotteryWidgetUrl + 'Get')
-                .query().$promise;
+                .query()
+                .$promise;
         }
-
+        
         function buyTickets(lotteryTickets) {
             return $resource(url + 'Enter').save(lotteryTickets).$promise;
         }
