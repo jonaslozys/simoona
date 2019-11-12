@@ -7,10 +7,11 @@
 
     lotteryRepository.$inject = [
         '$resource',
-        'endPoint'
+        'endPoint',
+        '$http'
     ];
 
-    function lotteryRepository($resource, endPoint) {
+    function lotteryRepository($resource, endPoint, $http) {
         var url = endPoint + '/Lottery/';
         var lotteryWidgetUrl = endPoint + '/LotteryWidget/';
 
