@@ -72,6 +72,7 @@
   "eventParticipantStatus_Attending": "Dalyvaus",
   "eventParticipantStatus_MaybeAttending": "Gal dalyvaus",
   "eventParticipantStatus_NotAttending": "Nedalyvaus",
+  "eventParticipantStatus_Queue": "Stoti į eilę",
   "joinComment": "Komentaras (ne privaloma)",
   "name": "Pavadinimas",
   "quantity": "Kiekis",

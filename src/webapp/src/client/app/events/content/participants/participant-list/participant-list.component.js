@@ -30,6 +30,7 @@
         vm.attendingParticipants = getAttendingParticipants;
         vm.maybeAttendingParticipants = getMaybeAttendingParticipants;
         vm.notAttendingParticipants = getNotAttendingParticipants;
+        vm.queuedParticipants = getQueuedParticipants;
 
         function toggleExpandCollapse() {
             if(vm.isExpanded) {
@@ -51,6 +52,10 @@
 
         function getNotAttendingParticipants() {
             return getParticipantsByStatus(attendStatus.NotAttending);
+        }
+
+        function getQueuedParticipants() {
+            return getParticipantsByStatus(attendStatus.Queued);
         }
 
         function getParticipantsByStatus(status) {

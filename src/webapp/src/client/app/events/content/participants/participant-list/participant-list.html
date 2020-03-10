@@ -79,6 +79,25 @@
                     </li>
                 </div>
             </div>
+            
+            <div ng-show="!!vm.queuedParticipants().length && vm.isMainParticipantList" class="panel panel-info">
+                <div class="panel-heading">{{'events.eventParticipantStatus_Queue' | translate}} ({{vm.queuedParticipants().length}})</div>
+                <div class="panel-body">
+            <li ng-repeat="participant in vm.queuedParticipants()">
+                <ace-event-participant participant="participant">
+                    <span ng-if="!!participant.userId && !participant.isLoading && vm.isDeleteVisible"
+                        class="event-participant-delete-button vismaicon vismaicon-cancel-circle"
+                        ace-confirmation-modal="vm.onLeaveEvent({participant: participant})"
+                        confirmation-modal-message="events.deleteUserConfirmationMessage"
+                        data-test-id="event-participant-delete-user" title="{{'common.delete' | translate}}" translate-cloak>
+                    </span>
+                    <span ng-if="participant.attendComment" class="event-participant-delete-button vismaicon vismaicon-comment"
+                        uib-tooltip="{{participant.attendComment}}" tooltip-placement="bottom" tooltip-append-to-body="true">
+                    </span>
+                </ace-event-participant>
+            </li>
+                </div>
+            </div>
         </ul>
     </div>    
 

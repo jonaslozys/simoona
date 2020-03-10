@@ -72,6 +72,7 @@
   "eventParticipantStatus_Attending": "Going",
   "eventParticipantStatus_MaybeAttending": "Maybe going",
   "eventParticipantStatus_NotAttending": "Not going",
+  "eventParticipantStatus_Queue": "Queue",
   "joinComment": "Comment (optional)",
   "name": "Name",
   "quantity": "Quantity",

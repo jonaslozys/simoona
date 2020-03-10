@@ -17,7 +17,8 @@
             NotAttending: 0,
             Attending: 1,
             MaybeAttending: 2,
-            Idle: 3
+            Idle: 3,
+            Queued: 4
         });
 
     eventJoinController.$inject = [
