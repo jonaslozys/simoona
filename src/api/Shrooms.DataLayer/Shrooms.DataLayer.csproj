@@ -835,6 +835,10 @@
     <Compile Include="Migrations\202002192014258_InitAdditionalUsersPermissions.Designer.cs">
       <DependentUpon>202002192014258_InitAdditionalUsersPermissions.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202003121557293_EventQueueing.cs" />
+    <Compile Include="Migrations\202003121557293_EventQueueing.Designer.cs">
+      <DependentUpon>202003121557293_EventQueueing.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\DataInitializer\ModulesInitializer.cs" />
     <Compile Include="Migrations\DataInitializer\PermissionBuilder.cs" />
@@ -1388,6 +1392,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202002192014258_InitAdditionalUsersPermissions.resx">
       <DependentUpon>202002192014258_InitAdditionalUsersPermissions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003121557293_EventQueueing.resx">
+      <DependentUpon>202003121557293_EventQueueing.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="sql_scripts\likes_migration.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

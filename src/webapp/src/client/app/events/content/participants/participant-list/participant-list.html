@@ -81,7 +81,7 @@
             </div>
             
             <div ng-show="!!vm.queuedParticipants().length && vm.isMainParticipantList" class="panel panel-info">
-                <div class="panel-heading">{{'events.eventParticipantStatus_Queue' | translate}} ({{vm.queuedParticipants().length}})</div>
+                <div class="panel-heading">{{'events.eventParticipantStatus_Queued' | translate}} ({{vm.queuedParticipants().length}})</div>
                 <div class="panel-body">
             <li ng-repeat="participant in vm.queuedParticipants()">
                 <ace-event-participant participant="participant">

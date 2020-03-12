@@ -44,6 +44,7 @@ namespace Shrooms.DataLayer.EntityModels.Models.Events
         public virtual ICollection<EventParticipant> EventParticipants { get; set; }
         public virtual ICollection<EventOption> EventOptions { get; set; }
         public bool IsPinned { get; set; }
+        public bool IsQueueEnabled { get; set; }
         [Required]
         public string Offices { get; set; }
 

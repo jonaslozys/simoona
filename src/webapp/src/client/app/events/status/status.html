@@ -1,7 +1,6 @@
 <div class="event-status">
-    <div ng-if="vm.eventStatusService.getEventStatus(vm.event) === vm.eventStatus.Full"
-         translate="events.eventFull"
-         data-test-id="event-status">
+    <div ng-if="vm.eventStatusService.getEventStatus(vm.event) === vm.eventStatus.Full">
+         <ace-event-queue event="vm.event" is-details="vm.isDetails"></ace-event-queue>
     </div>
 
     <div ng-if="vm.eventStatusService.getEventStatus(vm.event) === vm.eventStatus.RegistrationIsClosed"

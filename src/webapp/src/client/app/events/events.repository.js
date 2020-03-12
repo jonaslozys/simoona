@@ -31,6 +31,7 @@
             updateEvent: updateEvent,
             addColleagues: addColleagues,
             joinEvent: joinEvent,
+            queueEvent: queueEvent,
             leaveEvent: leaveEvent,
             pinEvent: pinEvent,
             downloadEvent: downloadEvent,
@@ -151,6 +152,13 @@
                 chosenOptions: chosenOptions,
                 attendStatus: attendStatus,
                 attendComment: attendComment
+            }).$promise;
+        }
+
+        function queueEvent(eventId, chosenOptions) {
+            return $resource(eventUrl + 'Join').save({
+                eventId: eventId,
+                chosenOptions: chosenOptions,
             }).$promise;
         }
 

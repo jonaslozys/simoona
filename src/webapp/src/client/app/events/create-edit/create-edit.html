@@ -308,6 +308,21 @@
                                 src="{{vm.event.imageName | imageThumb:vm.eventImageSize:'crop'}}" />
                         </div>
                     </div>
+                    <!--event queueing checkbox-->
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-sm-4"></label>
+                        <div class="col-xs-12 col-sm-6 col-md-4">
+                            <input id="queueOption" type="checkbox" class="event-form-checkbox"
+                                ng-model="vm.event.isQueueEnabled" />
+                            <label for="queueOption" class="label-word-break">
+                                {{'events.queueOption' | translate}}
+                                <span class="glyphicon glyphicon-info-sign"
+                                    uib-tooltip-template="'queueTooltipTemplate.html'" tooltip-placement="right"
+                                    tooltip-append-to-body="true" tooltip-class="service-request-status-tooltip"
+                                    style="font-size: 16px; color: #006fb0;"></span>
+                            </label>
+                        </div>
+                    </div>
                     <!-- event ignore single join checkbox -->
                     <div class="form-group" ng-if="vm.selectedType.isSingleJoin">
                         <label class="control-label col-xs-12 col-sm-4"></label>
@@ -453,5 +468,12 @@
 <script type="text/ng-template" id="targetOfficeTooltipTemplate.html">
     <div>
         <p>{{'events.targetOfficeTooltipParagraphOne' | translate}}</p>
+    </div>
+</script>
+
+<script type="text/ng-template" id="queueTooltipTemplate.html">
+    <div>
+        <p>{{'events.queueTooltipTemplateParagraphOne' | translate}}</p>
+        <p>{{'events.queueTooltipTemplateParagraphTwo' | translate}}</p>
     </div>
 </script>
