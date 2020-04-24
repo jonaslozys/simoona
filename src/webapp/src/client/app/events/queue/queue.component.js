@@ -32,24 +32,28 @@
         vm.enableAction = true;
 
         vm.queueEvent = queueEvent;
+        vm.unQueueEvent = unQueueEvent;
         vm.closeModal = closeModal;
+
 
         ////////
 
         function queueEvent(eventId) {
-            if (vm.enableActions) {
+            console.log(vm.event.participatingStatus);
+            if (vm.enableAction) {
                 vm.enableAction = false;
 
                 eventRepository.getEventOptions(eventId).then(function (responseEvent) {
                     vm.event.maxChoices = responseEvent.maxOptions;
                     vm.event.availableOptions = responseEvent.options;
+
                     if (!vm.event.availableOptions.length && !vm.isAddColleague) {
                         var selectedOptions = [];
 
-                        eventRepository.queueEvent(selectedOptions, eventId).then(function () {
-                            handleEventJoin();
+                        eventRepository.queueEvent(eventId, selectedOptions).then(function () {
                             notifySrv.success('events.joinedEvent');
                         }, function (error) {
+
                             vm.enableAction = true;
                             errorHandler.handleErrorMessage(error);
                         });
@@ -59,6 +63,24 @@
                 });
             }
         }
+
+        function unQueueEvent(eventId) {
+            if (vm.enableAction) {
+                eventRepository.updateAttendStatus(attendStatus.Idle, ' ', eventId).then(function () {
+/*
+                    if (changeToAttendStatus == attendStatus.MaybeAttending) {
+                        notifySrv.success('events.maybeJoiningEvent');
+                    } else if (changeToAttendStatus == attendStatus.NotAttending) {
+                        notifySrv.success('events.notJoiningEvent');
+                    }*/
+
+                }, function (error) {
+                    vm.enableAction = true;
+                    errorHandler.handleErrorMessage(error);
+                });
+            }
+        }
+
 
         function closeModal() {
             $uibModalInstance.close();

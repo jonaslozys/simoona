@@ -156,7 +156,7 @@
         }
 
         function queueEvent(eventId, chosenOptions) {
-            return $resource(eventUrl + 'Join').save({
+            return $resource(eventUrl + 'Queue').save({
                 eventId: eventId,
                 chosenOptions: chosenOptions,
             }).$promise;

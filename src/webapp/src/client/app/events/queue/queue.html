@@ -68,14 +68,14 @@
 </ace-event-options-change>
 
 <div class="dropdown text-nowrap" ng-if="!vm.isAddColleague && !vm.isDetails">
-    <a ng-if="vm.event.participatingStatus != vm.attendStatus.Attending || vm.event.participatingStatus == vm.attendStatus.Idle"
-        class="nc-btn nc-btn-default" ng-click="vm.joinEvent(vm.event.id)" translate-attr-title="events.eventJoin"
+    <a ng-if="vm.event.participatingStatus == vm.attendStatus.Idle"
+        class="nc-btn nc-btn-default" ng-click="vm.queueEvent(vm.event.id)" translate-attr-title="events.eventAction_Queue"
         data-test-id="join-event-button" translate>
-        <span class="vismaicon vismaicon-add2-circle"></span><span translate="events.attend"></span>
+        <span class="vismaicon vismaicon-add2-circle"></span><span translate="events.eventAction_Queue"></span>
     </a>
-    <a ng-if="vm.event.participatingStatus == vm.attendStatus.Attending" class="nc-btn nc-btn-danger"
-        ng-click="vm.leaveEvent(vm.event.id, '')" translate-attr-title="events.eventLeave"
+    <a ng-if="vm.event.participatingStatus == vm.attendStatus.Queued" class="nc-btn nc-btn-danger"
+        ng-click="vm.unQueueEvent(vm.event.id)" translate-attr-title="events.eventAction_UnQueue"
         data-test-id="leave-event-button" translate>
-        <span class="vismaicon vismaicon-cancel-circle"></span><span translate="events.eventLeave"></span>
+        <span class="vismaicon vismaicon-cancel-circle"></span><span translate="events.eventAction_UnQueue"></span>
     </a>
 </div>
