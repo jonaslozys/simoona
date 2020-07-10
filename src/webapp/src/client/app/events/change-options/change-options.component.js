@@ -14,14 +14,16 @@
 
     eventOptionsChangeController.$inject = [
         'eventRepository',
+        'attendStatus',
         '$uibModal'
     ];
 
-    function eventOptionsChangeController(eventRepository, $uibModal) {
+    function eventOptionsChangeController(eventRepository, attendStatus, $uibModal) {
         var vm = this;
 
         vm.changeSelectedOptions = changeSelectedOptions;
         vm.isDeadline = isDeadline;
+        vm.attendStatus = attendStatus;
         
 
         function changeSelectedOptions() {
@@ -49,6 +51,9 @@
                     },
                     isAddColleague: function () {
                         return false;
+                    },
+                    isQueue: function() {
+                        return vm.event.participatingStatus == vm.attendStatus.Queued;
                     }
                 }
             });

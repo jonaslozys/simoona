@@ -142,6 +142,8 @@
   "eventType": "Tipas",
   "eventEnded": "Pasibaigė",
   "joinedEvent": "Sėkmingai prisijungėte prie renginio",
+  "queuedEvent": "Sėkmingai įstojote į eilę",
+  "unQueuedEvent": "Sėkmingai išstojote iš eilės",
   "maybeJoiningEvent": "Sėkmingai pažymėjote, kad galbūt dalyvausite renginyje",
   "notJoiningEvent": "Sėkmingai pažymėjote, kad nedalyvausite renginyje",
   "eventIsHappening": "Vyksta dabar",

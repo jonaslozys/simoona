@@ -192,6 +192,9 @@
                     },
                     isChangeOptions: function () {
                         return false;
+                    },
+                    isQueue: function() {
+                        return false;
                     }
                 }
             });

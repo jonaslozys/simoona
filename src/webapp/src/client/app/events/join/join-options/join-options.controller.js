@@ -21,6 +21,7 @@
         'event',
         'isDetails',
         'isAddColleague',
+        'isQueue',
         'isChangeOptions',
         'localeSrv',
         'lodash',
@@ -29,13 +30,14 @@
     ];
 
     function eventJoinOptionsController($state, $uibModalInstance, inputTypes, authService, errorHandler,
-        eventRepository, $translate, notifySrv, event, isDetails, isAddColleague, isChangeOptions, localeSrv, lodash, attendStatus, optionRules) {
+        eventRepository, $translate, notifySrv, event, isDetails, isAddColleague, isQueue, isChangeOptions, localeSrv, lodash, attendStatus, optionRules) {
         /* jshint validthis: true */
         var vm = this;
 
         vm.options = event.availableOptions;
         vm.inputType = null;
         vm.isAddColleague = isAddColleague;
+        vm.isQueue = isQueue;
         vm.isChangeOptions = isChangeOptions;
         vm.participants = [];
         vm.selectedOptions = [];
@@ -105,31 +107,37 @@
 
         function joinEvent() {
             vm.isActionDisabled = true;
-
-            if (vm.selectedOptions.length > event.maxChoices) {
-                handleErrorMessage($translate.instant('events.maxOptionsError') + ' ' + event.maxChoices);
-            } else if (!vm.selectedOptions.length && event.options.length) {
-                handleErrorMessage('errorCodeMessages.messageNotEnoughOptions');
-            } else if (vm.isAddColleague && !vm.participants.length) {
-                handleErrorMessage('events.noParticipantsError');
-            } else if (vm.isAddColleague && vm.participants.length + event.participants.length > event.maxParticipants) {
-                var participants = event.maxParticipants - event.participants.length;
-                handleErrorMessage($translate.instant('events.maxParticipantsError') + ' ' + participants);
-            } else if (!hasDatePassed(event.startDate)) {
-                handleErrorMessage('', 'errorCodeMessages.messageEventJoinStartedOrFinished');
-                $uibModalInstance.close();
-            } else if (!hasDatePassed(event.registrationDeadlineDate)) {
-                handleErrorMessage('', 'events.eventJoinRegistrationDeadlinePassed');
-                $uibModalInstance.close();
-            } else {
+            if (vm.isQueue) {
                 var selectedOptionsId = lodash.map(vm.selectedOptions, 'id');
-                if (vm.isAddColleague) {
-                    var participantIds = lodash.map(vm.participants, 'id');
-                    eventRepository.addColleagues(event.id, selectedOptionsId, participantIds)
-                        .then(handleSuccessPromise, handleErrorPromise);
+                eventRepository.queueEvent(event.id, selectedOptionsId)
+                .then(handleQueueSuccessPromise, handleErrorPromise);
+            }
+            else {
+                if (vm.selectedOptions.length > event.maxChoices) {
+                    handleErrorMessage($translate.instant('events.maxOptionsError') + ' ' + event.maxChoices);
+                } else if (!vm.selectedOptions.length && event.options.length) {
+                    handleErrorMessage('errorCodeMessages.messageNotEnoughOptions');
+                } else if (vm.isAddColleague && !vm.participants.length) {
+                    handleErrorMessage('events.noParticipantsError');
+                } else if (vm.isAddColleague && vm.participants.length + event.participants.length > event.maxParticipants) {
+                    var participants = event.maxParticipants - event.participants.length;
+                    handleErrorMessage($translate.instant('events.maxParticipantsError') + ' ' + participants);
+                } else if (!hasDatePassed(event.startDate)) {
+                    handleErrorMessage('', 'errorCodeMessages.messageEventJoinStartedOrFinished');
+                    $uibModalInstance.close();
+                } else if (!hasDatePassed(event.registrationDeadlineDate)) {
+                    handleErrorMessage('', 'events.eventJoinRegistrationDeadlinePassed');
+                    $uibModalInstance.close();
                 } else {
-                    eventRepository.joinEvent(event.id, selectedOptionsId)
-                        .then(handleSuccessPromise, handleErrorPromise);
+                    var selectedOptionsId = lodash.map(vm.selectedOptions, 'id');
+                    if (vm.isAddColleague) {
+                        var participantIds = lodash.map(vm.participants, 'id');
+                        eventRepository.addColleagues(event.id, selectedOptionsId, participantIds)
+                            .then(handleSuccessPromise, handleErrorPromise);
+                    } else {
+                        eventRepository.joinEvent(event.id, selectedOptionsId)
+                            .then(handleSuccessPromise, handleErrorPromise);
+                    }
                 }
             }
         }
@@ -162,8 +170,28 @@
             notifySuccess();
         }
 
+        function handleQueueSuccessPromise() {
+            if (isDetails || vm.isAddColleague || isChangeOptions) {
+                eventRepository.getEventDetails(event.id).then(function (response) {
+                    event.options = response.options;
+                    event.participants = response.participants;
+                });
+            }
+
+            vm.isActionDisabled = false;
+            event.participatingStatus = attendStatus.Queued;
+            $uibModalInstance.close();
+
+            notifyQueueSuccess();
+        }
+
         function notifySuccess() {
             var message = isChangeOptions ? 'events.changedEventOptions' : 'events.joinedEvent';
+            notifySrv.success(message);
+        }
+
+        function notifyQueueSuccess() {
+            var message = isChangeOptions ? 'events.changedEventOptions' : 'events.queuedEvent';
             notifySrv.success(message);
         }
 
@@ -179,18 +207,6 @@
 
         function closeModal() {
             $uibModalInstance.close();
-        }
-
-        function canJoinEvent() {
-            if (!hasDatePassed(event.startDate)) {
-                notifySrv.error('errorCodeMessages.messageEventJoinStartedOrFinished');
-                return false;
-            } else if (!hasDatePassed(event.registrationDeadlineDate)) {
-                notifySrv.error('events.eventJoinRegistrationDeadlinePassed');
-                return false;
-            }
-
-            return true;
         }
 
         function isOptionsJoinAvailable() {

@@ -51,7 +51,8 @@
                         var selectedOptions = [];
 
                         eventRepository.queueEvent(eventId, selectedOptions).then(function () {
-                            notifySrv.success('events.joinedEvent');
+                            handleEventQueue();
+                            notifySrv.success('events.queuedEvent');
                         }, function (error) {
 
                             vm.enableAction = true;
@@ -67,18 +68,35 @@
         function unQueueEvent(eventId) {
             if (vm.enableAction) {
                 eventRepository.updateAttendStatus(attendStatus.Idle, ' ', eventId).then(function () {
-/*
-                    if (changeToAttendStatus == attendStatus.MaybeAttending) {
-                        notifySrv.success('events.maybeJoiningEvent');
-                    } else if (changeToAttendStatus == attendStatus.NotAttending) {
-                        notifySrv.success('events.notJoiningEvent');
-                    }*/
-
+                    handleEventQueue();
+                    notifySrv.success('events.unQueuedEvent');
                 }, function (error) {
                     vm.enableAction = true;
                     errorHandler.handleErrorMessage(error);
                 });
             }
+        }
+
+        function handleEventQueue() {
+                eventRepository.getEventDetails(vm.event.id).then(function (response) {
+                    angular.copy(response, vm.event);
+
+                    vm.event.options = response.options;
+                    vm.event.participants = response.participants;
+                    vm.event.participantsCount = recalculateJoinedParticipants();
+                });
+
+            vm.enableAction = true;
+        }
+
+        function recalculateJoinedParticipants() {
+            var participantsCount = 0;
+            vm.event.participants.forEach(function (participant) {
+                if (participant.attendStatus == attendStatus.Attending) {
+                    participantsCount++;
+                }
+            });
+            return participantsCount;
         }
 
 
@@ -105,6 +123,9 @@
                     },
                     isChangeOptions: function () {
                         return false;
+                    },
+                    isQueue: function() {
+                        return true;
                     }
                 }
             });
